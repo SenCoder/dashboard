@@ -1,14 +1,38 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.config.productionTip = false
+//导入样式
+import 'normalize.css'
+import 'font-awesome/scss/font-awesome.scss'
+import 'element-ui/lib/theme-default/index.css'
+
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+import router from './router'
+import store from 'store'
+
+//导入请求框架
+import api from './api'
+//导入自定义插件
+import Plugins from 'plugins'
+import App from './App'
+import './mock'
+
+//使用element-ui
 Vue.use(ElementUI)
 
+//使用自定义插件
+Vue.use(Plugins)
+
+//使用api
+Vue.use(api)
+
+//发布后是否显示提示
+Vue.config.productionTip = false
+
+//是否开启工具调试
+Vue.config.devtools = process.env.NODE_ENV === 'development'
+
 new Vue({
-  el: '#app',
   router,
-  render: h => h(App),
-}).$mount('#app')
+  store,
+  ...App
+}).$mount('mainbody')
