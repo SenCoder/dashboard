@@ -3,7 +3,7 @@
     <panel-title :title="$route.meta.title"></panel-title>
     <div class="panel-body" v-loading="load_data" element-loading-text="拼命加载中">
       <el-row>
-        <el-col :span="24">
+        <el-col :span="18">
           <el-form ref="form" :model="form" :rules="rules" label-width="100px">
             <el-form-item label="名称:" prop="name">
               <el-input v-model="form.name" placeholder="请输入内容" style="width: 250px;"></el-input>
@@ -36,7 +36,7 @@
                 style="width: 250px;"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="组件:" prop="trigger">
+            <el-form-item label="组件:" prop="triggers">
               <el-select v-model="form.region" placeholder="请选择组件类型" style="width: 250px;">
                 <el-option label="mongodb" value="mongodb"></el-option>
                 <el-option label="redis" value="redis"></el-option>
@@ -47,8 +47,12 @@
               <el-input type="textarea" v-model="form.desc" style="width: 250px;"></el-input>
             </el-form-item>
 
-            <el-form-item label="处理人:">
+            <el-form-item label="处理人:" prop="group">
               <el-input type="textarea" v-model="form.group" style="width: 250px;"></el-input>
+            </el-form-item>
+
+            <el-form-item label="抄送人:">
+              <el-input type="textarea" v-model="form.group_cc" style="width: 250px;"></el-input>
             </el-form-item>
 
             <el-form-item label="报警规则:" prop="trigger_rule">
@@ -68,12 +72,12 @@
                 </el-form-item>
                 <el-form-item label="操作符" :label-width="formLabelWidth">
                   <el-select v-model="form.operator" placeholder="请选择操作符">
-                    <el-option label=">" value="shanghai"></el-option>
-                    <el-option label="<" value="shanghai"></el-option>
-                    <el-option label="=" value="shanghai"></el-option>
-                    <el-option label=">=" value="shanghai"></el-option>
-                    <el-option label="<=" value="shanghai"></el-option>
-                    <el-option label="!=" value="shanghai"></el-option>
+                    <el-option label=">" value=">"></el-option>
+                    <el-option label="<" value="<"></el-option>
+                    <el-option label="=" value="="></el-option>
+                    <el-option label=">=" value=">="></el-option>
+                    <el-option label="<=" value="<="></el-option>
+                    <el-option label="!=" value="!="></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="阈值" :label-width="formLabelWidth">
@@ -95,6 +99,15 @@
                     :controls="false"
                     v-model="form.time"
                   ></el-input-number>
+
+                  <!-- <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="Right Top 提示文字"
+                    placement="right-start"
+                  >
+                    <el-button>右上</el-button>
+                  </el-tooltip>-->
                 </el-form-item>
                 <el-form-item label="告警级别" :label-width="formLabelWidth">
                   <el-select v-model="form.level" placeholder="告警级别">
@@ -136,15 +149,18 @@ export default {
         age: 20,
         birthday: this.$dateFormat(new Date(), "yyyy-MM-dd"),
         address: null,
-        description: "新增组件"
+        description: "新增告警规则",
+        group: null,
+        triggers: []
       },
       route_id: this.$route.params.id,
       load_data: false,
       on_submit_loading: false,
       dialogFormVisible: false,
-      formLabelWidth: "120px",
+      formLabelWidth: "100px",
       rules: {
-        name: [{ required: true, message: "名称不能为空", trigger: "blur" }]
+        name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
+        group: [{ required: true, message: "处理人不能为空", trigger: "blur" }]
       }
     };
   },
@@ -159,9 +175,10 @@ export default {
         .get({
           id: this.route_id
         })
-        .then(({ data }) => {
-          this.form = data;
+        .then(data => {
           this.load_data = false;
+          console.log(data);
+          this.form = data;
         })
         .catch(() => {
           this.load_data = false;

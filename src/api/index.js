@@ -12,11 +12,15 @@
 import * as api_file from './file'
 import * as api_table from './table'
 import * as api_user from './user'
+import * as monitorApi from './monitor'
+import * as alarmApi from './alarm'
 
 const apiObj = {
   api_file,
   api_table,
-  api_user
+  api_user,
+  monitorApi,
+  alarmApi,
 }
 
 const install = function (Vue) {

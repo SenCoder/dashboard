@@ -19,25 +19,24 @@
       >
         <el-table-column type="selection" width="55"></el-table-column>
 
-        <el-table-column type="expand">
+        <el-table-column type="expand" label="详情">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
+            <el-form label-position="right" inline class="demo-table-expand">
               <el-form-item label="应用名称">
                 <span>{{ props.row.name }}</span>
               </el-form-item>
               <el-form-item label="创建人">
-                <span>{{ props.row.age }}</span>
+                <span>{{ props.row.owner }}</span>
               </el-form-item>
               <el-form-item label="创建时间">
-                <span>{{ props.row.birthday }}</span>
+                <span>{{ props.row.create_at }}</span>
               </el-form-item>
               <el-form-item label="client_id">
-                <span>{{ props.row.address }}</span>
+                <span>{{ props.row.client_id }}</span>
               </el-form-item>
               <el-form-item label="client_secret">
-                <span>{{ "abcdefghijklmnabcdefghijklmn.abcdefghijklmnabcdefghijklmn.abcdefghijklmnabcdefghijklmnabcdefghijklmnabcdefghijklmn" }}</span>
+                <span>{{ props.row.client_secret }}</span>
               </el-form-item>
-          
             </el-form>
           </template>
         </el-table-column>
@@ -45,10 +44,9 @@
         <el-table-column prop="id" label="id" width="80" sortable></el-table-column>
         <el-table-column prop="name" label="名称" width="120" sortable></el-table-column>
 
-        <el-table-column prop="age" label="创建人" width="100" sortable></el-table-column>
-        <el-table-column prop="birthday" label="创建时间" width="120" sortable></el-table-column>
-        <el-table-column prop="address" label="client_id" sortable></el-table-column>
-        <el-table-column prop="client_secret" label="client_secret" sortable></el-table-column>
+        <el-table-column prop="create_by" label="创建人" width="100" sortable></el-table-column>
+        <el-table-column prop="create_at" label="创建时间" width="180" sortable></el-table-column>
+        <el-table-column prop="client_id" label="client_id" sortable></el-table-column>
 
         <el-table-column label="操作" width="180">
           <template scope="props">
@@ -117,18 +115,21 @@ export default {
     //获取数据
     get_table_data() {
       this.load_data = true;
-      this.$fetch.api_table
+      this.$fetch.alarmApi
         .list({
           page: this.currentPage,
           length: this.length
         })
-        .then(({ data: { result, page, total } }) => {
-          this.table_data = result;
-          this.currentPage = page;
-          this.total = total;
+        .then(data => {
+          console.log("pagexx===");
+          console.log(data);
+          this.table_data = data.Body;
+          this.currentPage = 1;
+          this.total = 1;
           this.load_data = false;
         })
-        .catch(() => {
+        .catch(error => {
+          console.log("page2=== ", error);
           this.load_data = false;
         });
     },
@@ -141,15 +142,21 @@ export default {
       })
         .then(() => {
           this.load_data = true;
-          this.$fetch.api_table
+          this.$fetch.alarmApi
             .del(item)
             .then(({ msg }) => {
+              console.log("<< ", msg)
+              
               this.get_table_data();
               this.$message.success(msg);
             })
-            .catch(() => {});
+            .catch(error => {
+              console.log(error);
+            });
         })
-        .catch(() => {});
+        .catch(error => {
+          console.log(error);
+        });
     },
     //页码选择
     handleCurrentChange(val) {
@@ -169,7 +176,7 @@ export default {
       })
         .then(() => {
           this.load_data = true;
-          this.$fetch.api_table
+          this.$fetch.alarmApi
             .batch_del(this.batch_select)
             .then(({ msg }) => {
               this.get_table_data();

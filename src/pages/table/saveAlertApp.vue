@@ -8,50 +8,24 @@
             <el-form-item label="名称:" prop="name">
               <el-input v-model="form.name" placeholder="请输入内容" style="width: 250px;"></el-input>
             </el-form-item>
-            <el-form-item label="状态:">
-              <el-radio-group v-model="form.sex">
-                <el-radio :label="1">正常</el-radio>
-                <el-radio :label="2">故障</el-radio>
-              </el-radio-group>
+            <el-form-item label="创建人:" prop="create_by">
+              <el-input v-model="form.create_by" placeholder="请输入姓名" style="width: 250px;"></el-input>
             </el-form-item>
-            <el-form-item label="年龄:">
-              <el-input-number
-                placeholder="请输入内容"
-                :max="100"
-                :min="1"
-                :value="20"
-                :controls="false"
-                v-model="form.age"
-                style="width: 250px;"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item label="生日:">
-              <el-date-picker
-                v-model="form.birthday"
-                type="date"
-                format="yyyy-MM-dd"
-                :editable="false"
-                @change="on_change_birthday"
-                placeholder="选择生日"
-                style="width: 250px;"
-              ></el-date-picker>
-            </el-form-item>
+           
             <el-form-item label="描述:">
               <el-input type="textarea" v-model="form.desc" style="width: 250px;"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="邮编:">
-              <el-input
-                placeholder="请输入内容"
-                :value="412300"
-                :controls="false"
-                v-model="form.zip"
-                style="width: 250px;"
-                :maxlength="6"
-                :minlength="6">
-              </el-input>
-            </el-form-item>-->
+
+            <el-form-item label="处理人:" prop="mail">
+              <el-input type="textarea" placeholder="邮箱用分号分隔" v-model="form.mail_to" style="width: 250px;"></el-input>
+            </el-form-item>
+
+            <el-form-item label="抄送人:">
+              <el-input type="textarea" placeholder="邮箱用分号分隔" v-model="form.mail_cc" style="width: 250px;"></el-input>
+            </el-form-item>
+
             <el-form-item>
-              <el-button type="primary" @click="on_submit_form" :loading="on_submit_loading">立即提交</el-button>
+              <el-button type="primary" @click="on_submit_form" :loading="on_submit_loading">提交</el-button>
               <el-button @click="$router.back()">取消</el-button>
             </el-form-item>
           </el-form>
@@ -68,17 +42,17 @@ export default {
     return {
       form: {
         name: null,
-        sex: 1,
-        age: 20,
-        birthday: this.$dateFormat(new Date(), "yyyy-MM-dd"),
-        address: null,
-        description: "新增应用"
+        desc: "",
+        mail_to : null,
+        mail_cc : null,
+        create_by : null,
       },
       route_id: this.$route.params.id,
       load_data: false,
       on_submit_loading: false,
       rules: {
-        name: [{ required: true, message: "名称不能为空", trigger: "blur" }]
+        name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
+        create_by: [{ required: true, message: "创建人不能为空", trigger: "blur" }]
       }
     };
   },
@@ -93,9 +67,10 @@ export default {
         .get({
           id: this.route_id
         })
-        .then(({ data }) => {
-          this.form = data;
+        .then(data => {
           this.load_data = false;
+          this.form = data;
+          
         })
         .catch(() => {
           this.load_data = false;
@@ -110,13 +85,16 @@ export default {
       this.$refs.form.validate(valid => {
         if (!valid) return false;
         this.on_submit_loading = true;
+        console.log(this.form)
+        console.log("debug")
         this.$fetch.api_table
           .save(this.form)
           .then(({ msg }) => {
-            this.$message.success(msg);
+            // this.$message.success(msg);
             setTimeout(this.$router.back(), 500);
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error)
             this.on_submit_loading = false;
           });
       });
