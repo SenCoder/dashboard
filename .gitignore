@@ -1,21 +1,32 @@
+# maven ignore
+target/
+
+# eclipse ignore
+.settings/
+.project
+.classpath
+
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system ignore
 .DS_Store
-node_modules
-/dist
+Thumbs.db
 
-# local env files
-.env.local
-.env.*.local
+# project ignore
+**/tmp
+pom.xml.versionsBackup
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw*
+# node ignore
+node_modules/
+dist/
