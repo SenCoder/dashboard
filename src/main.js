@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-default/index.css'
 
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import VCharts from 'v-charts'
 import router from './router'
 import store from 'store'
 
@@ -21,6 +22,9 @@ Vue.use(ElementUI)
 
 //使用自定义插件
 Vue.use(Plugins)
+
+// Fully import
+Vue.use(VCharts)
 
 //使用api
 Vue.use(api)

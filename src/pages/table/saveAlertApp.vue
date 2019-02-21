@@ -13,7 +13,7 @@
             </el-form-item>
            
             <el-form-item label="描述:">
-              <el-input type="textarea" v-model="form.desc" style="width: 250px;"></el-input>
+              <el-input type="textarea" v-model="form.description" style="width: 250px;"></el-input>
             </el-form-item>
 
             <el-form-item label="处理人:" prop="mail">
@@ -42,7 +42,7 @@ export default {
     return {
       form: {
         name: null,
-        desc: "",
+        description: "",
         mail_to : null,
         mail_cc : null,
         create_by : null,
@@ -63,23 +63,23 @@ export default {
     //获取数据
     get_form_data() {
       this.load_data = true;
-      this.$fetch.api_table
+      this.$fetch.alarmApi
         .get({
           id: this.route_id
         })
         .then(data => {
           this.load_data = false;
-          this.form = data;
-          
+          this.form = data.Body;
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error)
           this.load_data = false;
         });
     },
     //时间选择改变时
-    on_change_birthday(val) {
-      this.$set(this.form, "birthday", val);
-    },
+    // on_change_birthday(val) {
+    //   this.$set(this.form, "birthday", val);
+    // },
     //提交
     on_submit_form() {
       this.$refs.form.validate(valid => {
@@ -87,9 +87,9 @@ export default {
         this.on_submit_loading = true;
         console.log(this.form)
         console.log("debug")
-        this.$fetch.api_table
+        this.$fetch.alarmApi
           .save(this.form)
-          .then(({ msg }) => {
+          .then(msg => {
             // this.$message.success(msg);
             setTimeout(this.$router.back(), 500);
           })

@@ -2,7 +2,7 @@
   <div class="left-side">
     <div class="left-side-inner">
       <router-link to="/" class="logo block">
-        <img src="./images/logo.png" alt="AdminX">
+        <img src="./images/logo.png" alt="Hidba Dashboard">
       </router-link>
       <el-menu class="menu-box" theme="dark" router :default-active="$route.path">
         <div v-for="(item, index) in nav_menu_data" :key="index">

@@ -14,11 +14,13 @@ import viewPageComponent from 'pages/App'
 
 //home
 import homeComponent from 'pages/home'
+import dataComponent from 'pages/data'
+
 import noPageComponent from 'pages/error/404'
 import loginComponent from 'pages/user/login'
-import baseTableComponent from 'pages/table/base'
-import sortTableComponent from 'pages/table/sort'
-import saveTableComponent from 'pages/table/save'
+import baseTableComponent from 'pages/table/monitor'
+import sortTableComponent from 'pages/table/target'
+import saveTableComponent from 'pages/table/saveMonitor'
 import saveStrategy from 'pages/table/saveStrategy'
 import saveAlertApp from 'pages/table/saveAlertApp'
 
@@ -79,6 +81,15 @@ const routes = [
       }
     },
     {
+      path: '/monitor/instance/:id',
+      name: 'instanceDetail',
+      component: dataComponent,
+      meta: {
+        title: "实例详情",
+        auth: true
+      }
+    },
+    {
       path: '/monitor/strategy',
       name: 'strategy',
       component: strategy,
@@ -106,6 +117,15 @@ const routes = [
       }
     },
     {
+      path: '/monitor/strategy/update/:id',
+      name: 'strategyUpdate',
+      component: saveStrategy,
+      meta: {
+        title: "告警策略修改",
+        auth: true
+      }
+    },
+    {
       path: '/monitor/strategy/add',
       name: 'strategyAdd',
       component: saveStrategy,
@@ -116,7 +136,7 @@ const routes = [
     },
     {
       path: '/alert/chart',
-      name: 'chartsBar',
+      name: 'chartsBarX',
       component: barChartsComponent,
       meta: {
         title: "数据统计",
@@ -138,6 +158,15 @@ const routes = [
       component: saveAlertApp,
       meta: {
         title: "新增应用",
+        auth: true
+      }
+    },
+    {
+      path: '/alert/app/update/:id',
+      name: 'alertAppUpdate',
+      component: saveAlertApp,
+      meta: {
+        title: "应用更新",
         auth: true
       }
     },

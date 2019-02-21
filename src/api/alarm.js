@@ -2,6 +2,14 @@
 import fetch from 'common/fetch'
 import { port_table } from 'common/port_uri'
 
+//根据id查询数据
+export function get(data) {
+    return fetch({
+        url: port_table.getAlarmApp + "/" + data.id,
+        method: 'get',
+        // params
+    })
+}
 
 //添加或修改数据
 export function save(data) {
@@ -25,7 +33,7 @@ export function del(data) {
 
 //数据列表
 export function list(params) {
-    console.log(port_table)
+    // console.log(port_table)
     return fetch({
         url: port_table.listAlarmApp,
         method: 'get',
